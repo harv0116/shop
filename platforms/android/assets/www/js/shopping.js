@@ -64,14 +64,12 @@ function showList(){
   var ul = document.createElement("ul");
   ul.className = "listview";
   output.appendChild(ul);
+  
   for(var i=0;i<groceryList.length;i++){
     var li = document.createElement("li");
-    li.innerHTML = groceryList[i];
-    
+    li.innerHTML = groceryList[i]; 
     ul.appendChild(li);
   }
-  // put hammmer on ul - removeitem - doubltap
-  // hammer on ul - changeitem -singletap
   
   var listview = document.querySelector('ul');		
 		
