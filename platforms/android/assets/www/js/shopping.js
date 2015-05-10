@@ -4,6 +4,7 @@ var groceryList = [];
 document.addEventListener('deviceready', function(ev) {
 //document.addEventListener("DOMContentLoaded", function(ev){
   //this runs when the page loads
+
   
   if(localStorage.getItem("grocery-harv0116")){
     groceryList = JSON.parse(localStorage.getItem("grocery-harv0116"));
@@ -22,8 +23,9 @@ document.addEventListener('deviceready', function(ev) {
 
 			mchammertime.on('tap', function(ev) {
 				ev.preventDefault();
-				console.log(ev);				
-				var newItem = document.querySelector("#item").value;
+				console.log(ev);
+				newItem = "      ";				
+				newItem += document.querySelector("#item").value;   // add the class tagged to the data
 				groceryList.push( newItem );
 				localStorage.setItem("grocery-harv0116", JSON.stringify(groceryList) );
 				//convert from Array to String.
@@ -39,7 +41,7 @@ function removeItem(ev){
   var txt = ev.target.firstChild.nodeValue;
   
   for(var i=0;i<groceryList.length;i++){
-  	if(groceryList[i] == txt){
+	if(groceryList[i].substring(6) == txt){      // need to parse groceryList[i] to remove the first 6 letters
       //found the match
       groceryList.splice(i, 1);
     }
@@ -50,12 +52,23 @@ function removeItem(ev){
 
 function changeItem(ev){
 // turn colour to grey
+  var txt = ev.target.firstChild.nodeValue;
+  
+  for(var i=0;i<groceryList.length;i++){
+	if(groceryList[i].substring(6) == txt){      // need to parse groceryList[i] to remove the first 6 letters
+      //found the match
+      	if (ev.target.className == "tagged") {
+			groceryList[i] = "      " + groceryList[i].substring(6);
+			ev.target.className = "";
+		} else {
+			ev.target.className = "tagged";
+			groceryList[i] = "tagged" + groceryList[i].substring(6);
+		}
+    }
+  }
 
-	if (ev.target.className == "tagged") {
-		ev.target.className = "";
-	} else {
-		ev.target.className = "tagged";
-	}
+	localStorage.setItem("grocery-harv0116", JSON.stringify(groceryList) );
+	// somehow update the localstorage variable with tagged.
 }
 
 function showList(){
@@ -67,7 +80,8 @@ function showList(){
   
   for(var i=0;i<groceryList.length;i++){
     var li = document.createElement("li");
-    li.innerHTML = groceryList[i]; 
+	li.className = groceryList[i].substring(0, 6);  // get first 6 letters - class name
+    li.innerHTML = groceryList[i].substring(6);  
     ul.appendChild(li);
   }
   
