@@ -4,7 +4,7 @@ var groceryList = [];
 document.addEventListener('deviceready', function(ev) {
 //document.addEventListener("DOMContentLoaded", function(ev){
   //this runs when the page loads
-
+	localStorage.clear();
   
   if(localStorage.getItem("grocery-harv0116")){
     groceryList = JSON.parse(localStorage.getItem("grocery-harv0116"));
@@ -24,15 +24,24 @@ document.addEventListener('deviceready', function(ev) {
 			mchammertime.on('tap', function(ev) {
 				ev.preventDefault();
 				console.log(ev);
-				newItem = "      ";				
-				newItem += document.querySelector("#item").value;   // add the class tagged to the data
-				groceryList.push( newItem );
-				localStorage.setItem("grocery-harv0116", JSON.stringify(groceryList) );
-				//convert from Array to String.
-				document.getElementById('item').value='';
-				
-				showList();
-				return false;
+				textBox = document.querySelector("#item").value;
+				textBox = textBox.toString();
+				textBoxTrimmed = trim(textBox);   
+				if (textBoxTrimmed == "") 
+				{
+					// do not add to local storage
+					// we do not want to add blank entries
+				} else {
+					newItem = "      ";	
+					newItem += document.querySelector("#item").value;   // add the class tagged to the data
+					groceryList.push( newItem );
+					localStorage.setItem("grocery-harv0116", JSON.stringify(groceryList) );
+					//convert from Array to String.
+					document.getElementById('item').value='';
+					
+					showList();
+					return false;
+				}
 			});
 
 });
@@ -103,4 +112,8 @@ function showList(){
 		
 		removeItem(ev);
 	}); 
+}
+
+function trim(str) {
+        return str.replace(/^\s+|\s+$/g,"");
 }
